@@ -9,12 +9,12 @@
 namespace cli
 {
 
-class command_parse
+class Command_parse
 {
 public:
   
-  command_parse();
-  virtual ~command_parse();
+  Command_parse();
+  virtual ~Command_parse();
 
   error_result parse(const std::string& command,
                      std::vector<std::string>& argument_list);
@@ -23,8 +23,8 @@ public:
 
 private:
   
-  command_parse& operator=(const command_parse&);
-  command_parse(const command_parse&);
+  Command_parse& operator=(const Command_parse&);
+  Command_parse(const Command_parse&);
   
   struct Impl;
   Impl *m_p_impl;

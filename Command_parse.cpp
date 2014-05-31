@@ -8,14 +8,14 @@
 namespace cli
 {
 
-struct command_parse::Impl
+struct Command_parse::Impl
 {
   Impl();
   ~Impl();
 
   error_result parse(const std::string& command,
                      std::vector<std::string>& argument_list);
-  error_result parse(const int argc, const char **argv,
+  error_result parse(const int argc, const char** argv,
                      std::vector<std::string>& argument_list);
   error_result get_word(std::string &arument_line,
                         std::vector<std::string>& argument_list);
@@ -25,41 +25,41 @@ struct command_parse::Impl
 
 static const char* white_spaces = " \t\n\r\f\v";
 
-// command_parse ================================================================
+// Command_parse ================================================================
 
-command_parse::command_parse()
+Command_parse::Command_parse()
   : m_p_impl(new Impl)
 {
 }
 
-command_parse::~command_parse()
+Command_parse::~Command_parse()
 {
   delete m_p_impl;
 }
 
-error_result command_parse::parse(const std::string& command,
+error_result Command_parse::parse(const std::string& command,
                                   std::vector<std::string>& argument_list)
 {
   return m_p_impl->parse(command, argument_list);
 }
 
-error_result command_parse::parse(const int argc, const char** argv,
+error_result Command_parse::parse(const int argc, const char** argv,
                                   std::vector<std::string>& argument_list)
 {
   return m_p_impl->parse(argc, argv, argument_list);
 }
 
-// command_parse::Impl ==========================================================
+// Command_parse::Impl ==========================================================
 
-command_parse::Impl::Impl()
+Command_parse::Impl::Impl()
 {
 }
 
-command_parse::Impl::~Impl()
+Command_parse::Impl::~Impl()
 {
 }
 
-error_result command_parse::Impl::parse(const std::string& command,
+error_result Command_parse::Impl::parse(const std::string& command,
                                         std::vector<std::string>& argument_list)
 {
   error_result return_value = ERROR_NONE;
@@ -86,7 +86,7 @@ error_result command_parse::Impl::parse(const std::string& command,
   return return_value;
 }
 
-error_result command_parse::Impl::parse(const int argc, const char **argv,
+error_result Command_parse::Impl::parse(const int argc, const char** argv,
                                         std::vector<std::string>& argument_list)
 {
   error_result return_value = ERROR_NONE;
@@ -101,7 +101,7 @@ error_result command_parse::Impl::parse(const int argc, const char **argv,
   return return_value;
 }
 
-error_result command_parse::Impl::get_word(
+error_result Command_parse::Impl::get_word(
   std::string& argument_line, std::vector<std::string>& argument_list)
 {
   size_t i = argument_line.find_first_of(white_spaces);
@@ -110,7 +110,7 @@ error_result command_parse::Impl::get_word(
   return ERROR_NONE;
 }
 
-error_result command_parse::Impl::get_string(
+error_result Command_parse::Impl::get_string(
   std::string& argument_line, std::vector<std::string>& argument_list)
 {
   error_result return_value = ERROR_NONE;

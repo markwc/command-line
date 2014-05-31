@@ -8,7 +8,7 @@
 namespace cli
 {
 
-struct Command_line::Impl
+struct Command_function::Impl
 {
   std::map<std::string, command_function_t> function_map;
 
@@ -19,40 +19,40 @@ struct Command_line::Impl
   error_result add(const std::string& command, const command_function_t);
 };
 
-// Command_line ================================================================
+// command_function ================================================================
 
-Command_line::Command_line() : m_p_impl(new Impl)
+Command_function::Command_function() : m_p_impl(new Impl)
 {
 }
 
-Command_line::~Command_line()
+Command_function::~Command_function()
 {
   delete m_p_impl;
 }
 
-error_result Command_line::run(
+error_result Command_function::run(
   const std::vector<std::string>& argument_list)
 {
   return m_p_impl->run(argument_list);
 }
 
-error_result Command_line::add(
+error_result Command_function::add(
   const std::string &command, const command_function_t function)
 {
   return m_p_impl->add(command, function);
 }
 
-// Command_line::Impl ==========================================================
+// Command_function::Impl ==========================================================
 
-Command_line::Impl::Impl()
+Command_function::Impl::Impl()
 {
 }
 
-Command_line::Impl::~Impl()
+Command_function::Impl::~Impl()
 {
 }
 
-error_result Command_line::Impl::add(const std::string& command,
+error_result Command_function::Impl::add(const std::string& command,
                                      const command_function_t function)
 {
   error_result return_value = ERROR_NONE;
@@ -67,7 +67,7 @@ error_result Command_line::Impl::add(const std::string& command,
   return return_value;
 }
 
-error_result Command_line::Impl::run(
+error_result Command_function::Impl::run(
     const std::vector<std::string> &argument_list)
 {
   error_result return_value = ERROR_NONE;

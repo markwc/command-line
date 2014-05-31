@@ -8,9 +8,9 @@ using namespace cli;
 
 //====================================================================
 
-TEST(command_parse, trime_white_space)
+TEST(Command_parse, trime_white_space)
 {
-  command_parse *cli = new command_parse();
+  Command_parse *cli = new Command_parse();
   std::vector<std::string> argument_list;
   ASSERT_EQ(ERROR_NONE, cli->parse("test", argument_list));
   ASSERT_EQ("test", argument_list[0]);
@@ -29,9 +29,9 @@ TEST(command_parse, trime_white_space)
   delete cli;
 }
 
-TEST(command_parse, proper_string_arguments)
+TEST(Command_parse, proper_string_arguments)
 {
-  command_parse *cli = new command_parse();
+  Command_parse *cli = new Command_parse();
   std::vector<std::string> argument_list;
   ASSERT_EQ(ERROR_NONE, cli->parse("test \" this is my string! \"", argument_list));
   ASSERT_EQ(" this is my string! ", argument_list[1]);
@@ -41,9 +41,9 @@ TEST(command_parse, proper_string_arguments)
   delete cli;
 }
 
-TEST(command_parse, malformed_string_arguments)
+TEST(Command_parse, malformed_string_arguments)
 {
-  command_parse *cli = new command_parse();
+  Command_parse *cli = new Command_parse();
   std::vector<std::string> argument_list;
   ASSERT_EQ(ERROR_MALFORMED, cli->parse("test \" this is my string! ", argument_list));
   ASSERT_EQ(ERROR_MALFORMED, cli->parse("test \' this is my string! ", argument_list));
@@ -55,9 +55,9 @@ TEST(command_parse, malformed_string_arguments)
 static int argc = 5;
 static const char* argv[] = {"test", "arg1", "arg2", "arg3", "arg4"};
 
-TEST(command_parse, arc_argv_arguments)
+TEST(Command_parse, arc_argv_arguments)
 {
-  command_parse *cli = new command_parse();
+  Command_parse *cli = new Command_parse();
   std::vector<std::string> argument_list;
   ASSERT_EQ(ERROR_NONE, cli->parse(argc, argv, argument_list));
   for (size_t i = 0; i<argc; i++)

@@ -1,5 +1,5 @@
-#ifndef COMMAND_LINE_H
-#define COMMAND_LINE_H
+#ifndef COMMAND_FUNCTION_H
+#define COMMAND_FUNCTION_H
 
 #include "error.h"
 
@@ -9,14 +9,14 @@
 namespace cli
 {
 
-class Command_line
+class Command_function
 {
 public:
   
   typedef error_result (*command_function_t)(const std::vector<std::string>&);
   
-  Command_line();
-  virtual ~Command_line();
+  Command_function();
+  virtual ~Command_function();
 
   error_result run(const std::vector<std::string>& argument_list);
   error_result add(const std::string &command,
@@ -24,8 +24,8 @@ public:
 
 private:
   
-  Command_line& operator=(const Command_line&);
-  Command_line(const Command_line&);
+  Command_function& operator=(const Command_function&);
+  Command_function(const Command_function&);
   
   struct Impl;
   Impl *m_p_impl;
@@ -33,4 +33,4 @@ private:
 
 }
 
-#endif // #define COMMAND_LINE_H
+#endif // #define COMMAND_FUNCTION_H

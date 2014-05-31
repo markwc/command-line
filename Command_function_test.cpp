@@ -19,16 +19,16 @@ static error_result test_function(const std::vector<std::string> &arguments)
 
 //====================================================================
 
-TEST(Command_line, command_function_not_specified)
+TEST(Command_function, Command_function_not_specified)
 {
-  Command_line *cli = new Command_line();
+  Command_function *cli = new Command_function();
   ASSERT_EQ(ERROR_NOT_INITIALIZED, cli->add("test", 0));
   delete cli;
 }
 
-TEST(Command_line, command_found)
+TEST(Command_function, command_found)
 {
-  Command_line *cli = new Command_line();
+  Command_function *cli = new Command_function();
   std::vector<std::string> argument_list;
   ASSERT_EQ(ERROR_NONE, cli->add("test", test_function));
   argument_list.push_back("test");
@@ -36,9 +36,9 @@ TEST(Command_line, command_found)
   delete cli;
 }
 
-TEST(Command_line, command_not_found)
+TEST(Command_function, command_not_found)
 {
-  Command_line *cli = new Command_line();
+  Command_function *cli = new Command_function();
   std::vector<std::string> argument_list;
   ASSERT_EQ(ERROR_NONE, cli->add("test", test_function));
   argument_list.push_back("testy");
