@@ -1,20 +1,14 @@
 #ifndef COMMAND_LINE_H
 #define COMMAND_LINE_H
 
+#include "error.h"
+
 #include <string>
 #include <vector>
 
 namespace cli
 {
 
-enum error_result
-{
-  ERROR_NONE = 0,
-  ERROR_NOT_INITIALIZED = -1,
-  ERROR_NOT_FOUND = -2,
-  ERROR_MALFORMED = -3
-};
-  
 class Command_line
 {
 public:
@@ -24,11 +18,9 @@ public:
   Command_line();
   virtual ~Command_line();
 
-  error_result process_command(const std::string& line);
-  error_result process_command(const int argc, const char** argv);
-  error_result process_command(const std::vector<std::string>& argument_list);
-  error_result add_command(const std::string &command,
-                           const command_function_t function);
+  error_result run(const std::vector<std::string>& argument_list);
+  error_result add(const std::string &command,
+                   const command_function_t function);
 
 private:
   
