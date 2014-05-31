@@ -4,26 +4,31 @@
 #include <string>
 #include <vector>
 
+namespace cli
+{
+
+enum error_result
+{
+  ERROR_NONE = 0,
+  ERROR_NOT_INITIALIZED = -1,
+  ERROR_NOT_FOUND = -2,
+  ERROR_MALFORMED = -3
+};
+  
 class Command_line
 {
 public:
   
-  enum result
-  {
-    ERROR_NONE = 0,
-    ERROR_NOT_INITIALIZED = -1,
-    ERROR_NOT_FOUND = -2
-  };
-  
-  typedef int (*command_function_t)(const std::vector<std::string>&);
+  typedef error_result (*command_function_t)(const std::vector<std::string>&);
   
   Command_line();
   virtual ~Command_line();
 
-  int process_command(const std::string& line);
-  int process_command(const int argc, const char** argv);
-  int process_command(const std::vector<std::string>& argument_list);
-  int add_command(const std::string &command, const command_function_t function);
+  error_result process_command(const std::string& line);
+  error_result process_command(const int argc, const char** argv);
+  error_result process_command(const std::vector<std::string>& argument_list);
+  error_result add_command(const std::string &command,
+                           const command_function_t function);
 
 private:
   
@@ -33,5 +38,7 @@ private:
   struct Impl;
   Impl *m_p_impl;
 };
+
+}
 
 #endif // #define COMMAND_LINE_H

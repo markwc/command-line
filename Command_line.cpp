@@ -5,6 +5,9 @@
 #include <string>
 #include <vector>
 
+namespace cli
+{
+
 struct Command_line::Impl
 {
   std::map<std::string, command_function_t> function_map;
@@ -12,12 +15,15 @@ struct Command_line::Impl
   Impl();
   ~Impl();
 
-  int process_command(const std::string& line);
-  int process_command(const int argc, const char **argv);
-  int process_command(const std::vector<std::string> &argument_list);
-  int add_command(const std::string &command, const command_function_t);
-  int get_word(std::string &argument_line, std::vector<std::string> &argument_listn);
-  int get_string(std::string &argument_line, std::vector<std::string> &argument_list);
+  error_result process_command(const std::string& line);
+  error_result process_command(const int argc, const char **argv);
+  error_result process_command(const std::vector<std::string> &argument_list);
+  error_result add_command(const std::string &command,
+                           const command_function_t);
+  error_result get_word(std::string &argument_line,
+                        std::vector<std::string> &argument_listn);
+  error_result get_string(std::string &argument_line,
+                          std::vector<std::string> &argument_list);
 };
 
 static const char* white_spaces = " \t\n\r\f\v";
@@ -33,23 +39,26 @@ Command_line::~Command_line()
   delete m_p_impl;
 }
 
-int Command_line::process_command(const std::string &line)
+error_result Command_line::process_command(
+  const std::string &line)
 {
   return m_p_impl->process_command(line);
 }
 
-int Command_line::process_command(const int argc, const char** argv)
+error_result Command_line::process_command(
+  const int argc, const char** argv)
 {
   return m_p_impl->process_command(argc, argv);
 }
 
-int Command_line::process_command(const std::vector<std::string>& argument_list)
+error_result Command_line::process_command(
+  const std::vector<std::string>& argument_list)
 {
   return m_p_impl->process_command(argument_list);
 }
 
-int Command_line::add_command(const std::string &command,
-                              const command_function_t function)
+error_result Command_line::add_command(
+  const std::string &command, const command_function_t function)
 {
   return m_p_impl->add_command(command, function);
 }
@@ -64,10 +73,10 @@ Command_line::Impl::~Impl()
 {
 }
 
-int Command_line::Impl::add_command(const std::string &command,
-                                    const command_function_t function)
+error_result Command_line::Impl::add_command(
+  const std::string &command, const command_function_t function)
 {
-  int return_value = ERROR_NONE;
+  error_result return_value = ERROR_NONE;
   if (0 != function)
   {
     function_map[command] = function;
@@ -79,9 +88,10 @@ int Command_line::Impl::add_command(const std::string &command,
   return return_value;
 }
 
-int Command_line::Impl::process_command(const std::string &line)
+error_result Command_line::Impl::process_command(
+  const std::string &line)
 {
-  int return_value = ERROR_NONE;
+  error_result return_value = ERROR_NONE;
   std::vector<std::string> argument_list;
   std::string argument_line = line;
   size_t i = argument_line.find_first_not_of(white_spaces);
@@ -110,7 +120,8 @@ int Command_line::Impl::process_command(const std::string &line)
   return return_value;
 }
 
-int Command_line::Impl::process_command(const int argc, const char **argv)
+error_result Command_line::Impl::process_command(
+  const int argc, const char **argv)
 {
   std::vector<std::string> argument_list;
   for (size_t i = 0; i < argc; i++)
@@ -120,10 +131,10 @@ int Command_line::Impl::process_command(const int argc, const char **argv)
   return process_command(argument_list);
 }
 
-int Command_line::Impl::process_command(
+error_result Command_line::Impl::process_command(
     const std::vector<std::string> &argument_list)
 {
-  int return_value = ERROR_NONE;
+  error_result return_value = ERROR_NONE;
   if (function_map.end() != function_map.find(argument_list[0]))
   {
     function_map[argument_list[0]](argument_list);
@@ -135,7 +146,8 @@ int Command_line::Impl::process_command(
   return return_value;
 }
 
-int Command_line::Impl::get_word(std::string& argument_line, std::vector<std::string>& argument_list)
+error_result Command_line::Impl::get_word(
+  std::string& argument_line, std::vector<std::string>& argument_list)
 {
   size_t i = argument_line.find_first_of(white_spaces);
   argument_list.push_back(argument_line.substr(0, i));
@@ -143,9 +155,10 @@ int Command_line::Impl::get_word(std::string& argument_line, std::vector<std::st
   return ERROR_NONE;
 }
 
-int Command_line::Impl::get_string(std::string& argument_line, std::vector<std::string>& argument_list)
+error_result Command_line::Impl::get_string(
+  std::string& argument_line, std::vector<std::string>& argument_list)
 {
-  int return_value = ERROR_NONE;
+  error_result return_value = ERROR_NONE;
   char delimiter = argument_line[0];
   argument_line.erase(0, 1);
   size_t i = argument_line.find_first_of(delimiter);
@@ -156,7 +169,9 @@ int Command_line::Impl::get_string(std::string& argument_line, std::vector<std::
   }
   else
   {
-    return_value = ERROR_NOT_FOUND;
+    return_value = ERROR_MALFORMED;
   }
   return return_value;
+}
+
 }
