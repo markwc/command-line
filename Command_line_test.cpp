@@ -56,6 +56,8 @@ TEST(Command_line, string_arguments)
   ASSERT_EQ(" this is my string! ", last_arguments[1]);
   ASSERT_EQ(Command_line::ERROR_NONE, cli->process_command("test ' this is my string! '"));
   ASSERT_EQ(" this is my string! ", last_arguments[1]);
+  ASSERT_EQ(Command_line::ERROR_NOT_FOUND, cli->process_command("test \" this is my string! "));
+  ASSERT_EQ(Command_line::ERROR_NOT_FOUND, cli->process_command("test ' this is my string! "));
   delete cli;
 }
 

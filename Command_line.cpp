@@ -7,7 +7,7 @@
 
 struct Command_line::Impl
 {
-  std::map<std::string, command_function> function_map;
+  std::map<std::string, command_function_t> function_map;
 
   Impl();
   ~Impl();
@@ -16,9 +16,11 @@ struct Command_line::Impl
   int process_command(const int argc, const char **argv);
   int process_command(const std::vector<std::string> &argument_list);
   int add_command(const std::string &command, const command_function_t);
-  std::string get_word(std::string &argument_line);
-  std::string get_string(std::string &argument_line);
+  int get_word(std::string &argument_line, std::vector<std::string> &argument_listn);
+  int get_string(std::string &argument_line, std::vector<std::string> &argument_list);
 };
+
+static const char* white_spaces = " \t\n\r\f\v";
 
 // Command_line ================================================================
 
@@ -54,8 +56,6 @@ int Command_line::add_command(const std::string &command,
 
 // Command_line::Impl ==========================================================
 
-static const char* white_spaces = " \t\n\r\f\v";
-
 Command_line::Impl::Impl()
 {
 }
@@ -86,24 +86,28 @@ int Command_line::Impl::process_command(const std::string &line)
   std::string argument_line = line;
   size_t i = argument_line.find_first_not_of(white_spaces);
   argument_line.erase(0, i);
-  while (false == argument_line.empty())
+  while ((false == argument_line.empty()) && (ERROR_NONE == return_value))
   {
     switch (argument_line[0])
     {
     case '\"':
-      argument_list.push_back(get_string(argument_line));
+      return_value = get_string(argument_line, argument_list);
       break;
     case '\'':
-      argument_list.push_back(get_string(argument_line));
+      return_value = get_string(argument_line, argument_list);
       break;
     default:
-      argument_list.push_back(get_word(argument_line));
+      return_value = get_word(argument_line, argument_list);
       break;
     }
     size_t i = argument_line.find_first_not_of(white_spaces);
     argument_line.erase(0, i);
   }
-  return process_command(argument_list);
+  if (ERROR_NONE == return_value)
+  {
+    return_value = process_command(argument_list);
+  }
+  return return_value;
 }
 
 int Command_line::Impl::process_command(const int argc, const char **argv)
@@ -131,20 +135,28 @@ int Command_line::Impl::process_command(
   return return_value;
 }
 
-std::string Command_line::Impl::get_word(std::string &argument_line)
+int Command_line::Impl::get_word(std::string& argument_line, std::vector<std::string>& argument_list)
 {
   size_t i = argument_line.find_first_of(white_spaces);
-  std::string result = argument_line.substr(0, i);
+  argument_list.push_back(argument_line.substr(0, i));
   argument_line.erase(0, i);
-  return result;
+  return ERROR_NONE;
 }
 
-std::string Command_line::Impl::get_string(std::string &argument_line)
+int Command_line::Impl::get_string(std::string& argument_line, std::vector<std::string>& argument_list)
 {
+  int return_value = ERROR_NONE;
   char delimiter = argument_line[0];
   argument_line.erase(0, 1);
   size_t i = argument_line.find_first_of(delimiter);
-  std::string result = argument_line.substr(0, i);
-  argument_line.erase(0, i + 1);
-  return result;
+  if (i < argument_line.size())
+  {
+    argument_list.push_back(argument_line.substr(0, i));
+    argument_line.erase(0, i + 1);
+  }
+  else
+  {
+    return_value = ERROR_NOT_FOUND;
+  }
+  return return_value;
 }
