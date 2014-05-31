@@ -8,6 +8,13 @@ class Command_line
 {
 public:
   
+  enum result
+  {
+    ERROR_NONE = 0,
+    ERROR_NOT_INITIALIZED = -1,
+    ERROR_NOT_FOUND = -2
+  };
+  
   typedef int (*command_function)(const std::vector<std::string>&);
   
   Command_line();

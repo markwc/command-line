@@ -31,15 +31,25 @@ Command_line::~Command_line()
   delete m_p_impl;
 }
 
-int Command_line::add_command(const std::string &command,
-                              command_function function)
-{
-  return m_p_impl->add_command(command, function);
-}
-
 int Command_line::process_command(const std::string &line)
 {
   return m_p_impl->process_command(line);
+}
+
+int Command_line::process_command(const int argc, const char** argv)
+{
+  return m_p_impl->process_command(argc, argv);
+}
+
+int Command_line::process_command(const std::vector<std::string>& argument_list)
+{
+  return m_p_impl->process_command(argument_list);
+}
+
+int Command_line::add_command(const std::string &command,
+                              const command_function function)
+{
+  return m_p_impl->add_command(command, function);
 }
 
 // Command_line::Impl ==========================================================
@@ -55,23 +65,23 @@ Command_line::Impl::~Impl()
 }
 
 int Command_line::Impl::add_command(const std::string &command,
-                                    command_function function)
+                                    const command_function function)
 {
-  int return_value = 0;
+  int return_value = ERROR_NONE;
   if (0 != function)
   {
     function_map[command] = function;
   }
   else
   {
-    return_value = -1;
+    return_value = ERROR_NOT_INITIALIZED;
   }
   return return_value;
 }
 
 int Command_line::Impl::process_command(const std::string &line)
 {
-  int return_value = 0;
+  int return_value = ERROR_NONE;
   std::vector<std::string> argument_list;
   std::string argument_line = line;
   size_t i = argument_line.find_first_not_of(white_spaces);
@@ -93,32 +103,30 @@ int Command_line::Impl::process_command(const std::string &line)
     size_t i = argument_line.find_first_not_of(white_spaces);
     argument_line.erase(0, i);
   }
-  if (function_map.end() != function_map.find(argument_list[0]))
-  {
-    function_map[argument_list[0]](argument_list);
-  }
-  else
-  {
-    return_value = -1;
-  }
-  return return_value;
+  return process_command(argument_list);
 }
 
 int Command_line::Impl::process_command(const int argc, const char **argv)
 {
-  int return_value = 0;
   std::vector<std::string> argument_list;
   for (size_t i = 0; i < argc; i++)
   {
     argument_list.push_back(argv[i]);
   }
+  return process_command(argument_list);
+}
+
+int Command_line::Impl::process_command(
+    const std::vector<std::string> &argument_list)
+{
+  int return_value = ERROR_NONE;
   if (function_map.end() != function_map.find(argument_list[0]))
   {
     function_map[argument_list[0]](argument_list);
   }
   else
   {
-    return_value = -1;
+    return_value = ERROR_NOT_FOUND;
   }
   return return_value;
 }
