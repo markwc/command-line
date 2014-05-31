@@ -12,10 +12,10 @@ struct Command_line::Impl
   Impl();
   ~Impl();
 
-  int process_command(const std::string &line);
+  int process_command(const std::string& line);
   int process_command(const int argc, const char **argv);
   int process_command(const std::vector<std::string> &argument_list);
-  int add_command(const std::string &command, const command_function);
+  int add_command(const std::string &command, const command_function_t);
   std::string get_word(std::string &argument_line);
   std::string get_string(std::string &argument_line);
 };
@@ -47,7 +47,7 @@ int Command_line::process_command(const std::vector<std::string>& argument_list)
 }
 
 int Command_line::add_command(const std::string &command,
-                              const command_function function)
+                              const command_function_t function)
 {
   return m_p_impl->add_command(command, function);
 }
@@ -65,7 +65,7 @@ Command_line::Impl::~Impl()
 }
 
 int Command_line::Impl::add_command(const std::string &command,
-                                    const command_function function)
+                                    const command_function_t function)
 {
   int return_value = ERROR_NONE;
   if (0 != function)

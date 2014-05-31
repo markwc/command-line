@@ -15,15 +15,15 @@ public:
     ERROR_NOT_FOUND = -2
   };
   
-  typedef int (*command_function)(const std::vector<std::string>&);
+  typedef int (*command_function_t)(const std::vector<std::string>&);
   
   Command_line();
   virtual ~Command_line();
-  
+
   int process_command(const std::string& line);
   int process_command(const int argc, const char** argv);
   int process_command(const std::vector<std::string>& argument_list);
-  int add_command(const std::string &command, const command_function function);
+  int add_command(const std::string &command, const command_function_t function);
 
 private:
   
