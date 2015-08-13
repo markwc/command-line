@@ -19,7 +19,7 @@ static error_result test_function(const std::vector<std::string> &arguments)
 
 //====================================================================
 
-TEST(Command_function, Command_function_not_specified)
+TEST(Command_function, not_initialized)
 {
   Command_function *cli = new Command_function();
   ASSERT_EQ(ERROR_NOT_INITIALIZED, cli->add("test", 0));
