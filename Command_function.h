@@ -31,11 +31,17 @@ public:
                    const command_function_t function);
 
 private:
-  Command_function& operator=(const Command_function&);
-  Command_function(const Command_function&);
-
+  /// Forward declaration of the private implementation struct.
   struct Impl;
+  /// Service private implementation pointer.
   Impl* m_p_impl;
+  /// Private implementation of the assignment operator to restrict
+  /// copying of the instance of this class to avoid double free
+  /// errors.
+  Command_function& operator=(const Command_function&);
+  /// Private copy constructor to restrict copying of the instance
+  /// of this class to avoid double free errors.
+  Command_function(const Command_function&);
 };
 }
 
