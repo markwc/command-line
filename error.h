@@ -4,12 +4,17 @@
 namespace cli
 {
 
+enum status_code_category
+{
+  STATUS_CODE_ERROR = 0x100;
+};
+
 enum error_result
 {
-  ERROR_NONE = 0,
-  ERROR_NOT_INITIALIZED = -1,
-  ERROR_NOT_FOUND = -2,
-  ERROR_MALFORMED = -3
+  ERROR_NONE = STATUS_CODE_ERROR | 0,
+  ERROR_NOT_INITIALIZED = STATUS_CODE_ERROR | 1,
+  ERROR_NOT_FOUND = STATUS_CODE_ERROR | 2,
+  ERROR_MALFORMED = STATUS_CODE_ERROR | 3
 };
 
 }
