@@ -6,7 +6,7 @@ namespace cli
 
 enum status_code_category
 {
-  STATUS_CODE_ERROR = 0x100;
+  STATUS_CODE_ERROR = 0x100
 };
 
 enum error_result
