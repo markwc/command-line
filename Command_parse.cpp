@@ -1,3 +1,5 @@
+/// @file Command_parse.h
+
 #include "Command_parse.h"
 
 #include <iostream>
@@ -7,6 +9,15 @@
 
 namespace cli
 {
+
+//------------------------------------------------------------------------------
+// PRIVATE IMPLEMENTATION
+//
+// The functions and variables in this section are private and should only be
+// used by the public functions in the next section. Do not include them in
+// header file.
+//------------------------------------------------------------------------------
+
 static const char* white_spaces = " \t\n\r\f\v";
 
 struct Command_parse::Impl
@@ -46,8 +57,7 @@ struct Command_parse::Impl
     return return_value;
   }
 
-  error_result parse(const int argc,
-                     const char** argv,
+  error_result parse(const int argc, const char** argv,
                      std::vector<std::string>& argument_list)
   {
     error_result return_value = ERROR_NONE;
@@ -91,7 +101,17 @@ struct Command_parse::Impl
   }
 };
 
-Command_parse::Command_parse() : m_p_impl(new Impl)
+//------------------------------------------------------------------------------
+// PUBLIC IMPLEMENTATION
+//
+// These are the publicly accessible functions. There should not be any publicly
+// accessible variables in this section. All variables should be in the private
+// section above, but can be accessible through public functions in this
+// section. These functions should be declared in header file.
+//------------------------------------------------------------------------------
+
+Command_parse::Command_parse()
+    : m_p_impl(new Impl)
 {
 }
 
@@ -106,10 +126,9 @@ error_result Command_parse::parse(const std::string& command,
   return m_p_impl->parse(command, argument_list);
 }
 
-error_result Command_parse::parse(const int argc,
-                                  const char** argv,
+error_result Command_parse::parse(const int argc, const char** argv,
                                   std::vector<std::string>& argument_list)
 {
   return m_p_impl->parse(argc, argv, argument_list);
 }
-}
+} // namespace cli

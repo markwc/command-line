@@ -1,4 +1,6 @@
-#include "Command_function.h"
+/// @file Command_function.cpp
+
+#include <Command_function.h>
 
 #include <iostream>
 #include <map>
@@ -7,6 +9,15 @@
 
 namespace cli
 {
+
+//------------------------------------------------------------------------------
+// PRIVATE IMPLEMENTATION
+//
+// The functions and variables in this section are private and should only be
+// used by the public functions in the next section. Do not include them in
+// header file.
+//------------------------------------------------------------------------------
+
 struct Command_function::Impl
 {
   std::map<std::string, command_function_t> function_map;
@@ -48,7 +59,17 @@ struct Command_function::Impl
   }
 };
 
-Command_function::Command_function() : m_p_impl(new Impl)
+//------------------------------------------------------------------------------
+// PUBLIC IMPLEMENTATION
+//
+// These are the publicly accessible functions. There should not be any publicly
+// accessible variables in this section. All variables should be in the private
+// section above, but can be accessible through public functions in this
+// section. These functions should be declared in header file.
+//------------------------------------------------------------------------------
+
+Command_function::Command_function()
+    : m_p_impl(new Impl)
 {
 }
 
@@ -58,7 +79,7 @@ Command_function::~Command_function()
 }
 
 error_result
-    Command_function::run(const std::vector<std::string>& argument_list)
+Command_function::run(const std::vector<std::string>& argument_list)
 {
   return m_p_impl->run(argument_list);
 }
@@ -68,4 +89,4 @@ error_result Command_function::add(const std::string& command,
 {
   return m_p_impl->add(command, function);
 }
-}
+} // namespace cli
